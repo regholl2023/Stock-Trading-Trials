@@ -1,5 +1,6 @@
 import alpaca_trade_api as tradeapi
 from tickers import sp500
+import yfinance as yf 
 
 API_KEY = "PK53MZ4MH9XBPI4H9NV0"
 SECRET_KEY = "z1ifxefIvc6tV75bt8ZcAgwOyyJ7l4oAzAe6wB6L"
@@ -9,14 +10,14 @@ api = tradeapi.REST(API_KEY, SECRET_KEY, base_url=BASE_URL)
 
 account_info = api.get_account()
 print(account_info)
-
 positions = api.list_positions()
+print(positions)
 
-timeframe = '1D'  # 1 day candles
-start_date = '2022-01-01'
-end_date = '2022-08-31'
+ticker = "AAPL"  
+stock_data = yf.Ticker(ticker)
 
-stock_data = {}
-for symbol in sp500:
-    stock_data[symbol] = api.get_asset(symbol, timeframe, start=start_date, end=end_date).df[symbol]
-print(stock_data)
+hist = stock_data.history(period="5d")
+print(hist)
+
+real_time_data = stock_data.history(period="1d", interval="1m")
+print(real_time_data)
